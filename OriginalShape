@@ -1,0 +1,57 @@
+package shape;
+
+import java.awt.Point;
+import model.ShapeColor;
+import model.ShapeShadingType;
+import model.ShapeType;
+
+public class OriginalShape implements IShape  {
+
+	
+	public ShapeColor primaryColor;
+	public ShapeColor secondaryColor;
+	public ShapeType shapeType;
+	public ShapeShadingType shadingType;
+	public Point p1;
+	public Point p2;
+
+
+	public OriginalShape(ShapeColor primaryColor, ShapeColor secondaryColor, ShapeType shapeType, ShapeShadingType shadingType,
+			Point p1, Point p2) {
+		
+		this.primaryColor = primaryColor;
+		this.secondaryColor = secondaryColor;
+		this.shapeType = shapeType;
+		this.shadingType = shadingType;
+		this.p1 = p1;
+		this.p2 = p2;
+	
+	}
+
+	public ShapeColor getActivePrimaryColor() {
+		return primaryColor;
+	}
+
+	public ShapeColor getActiveSecondaryColor() {
+		return secondaryColor;
+	}
+
+	public ShapeType getActiveShapeType() {
+		return shapeType;
+	}
+
+	public ShapeShadingType getActiveShapeShadingType() {
+		return shadingType;
+	}
+
+	public Point getP1() {
+		return p1;
+	}
+
+	public Point getP2() {
+		return p2;
+	}
+	
+	
+	
+}
