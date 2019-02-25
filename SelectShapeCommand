@@ -1,0 +1,52 @@
+package command;
+
+import java.util.List;
+import java.awt.Point;
+import java.awt.Rectangle;
+import shape.IShape;
+import shape.OriginalShape;
+import shape.ShapeList;
+import shape.ShapeUtill;
+
+
+public class SelectShapeCommand implements ICommand {
+	
+	private final Rectangle selectArea;
+	private OriginalShape os;
+	
+	public SelectShapeCommand(Point p1, Point p2) {
+		selectArea = new Rectangle(ShapeUtill.getSmallerX(p1, p2), 
+				ShapeUtill.getSmallerY(p1, p2),
+				ShapeUtill.getWidth(p1, p2), 
+				ShapeUtill.getHeight(p1, p2));
+	}
+	
+	@Override
+	public void execute() {
+		ShapeList shapeList = ShapeList.getInstance();
+		shapeList.flushSelect();
+		List<IShape> shapes = shapeList.getShapes();
+		for (IShape shape : shapes) {
+			Point p1 = shape.getP1();
+			Point p2 = shape.getP2();
+			if(selectArea.intersects(ShapeUtill.getSmallerX(p1, p2),
+			          ShapeUtill.getSmallerY(p1, p2),
+			          ShapeUtill.getWidth(p1, p2),
+			          ShapeUtill.getHeight(p1, p2)) | shapes.contains(p1)) {
+				shapeList.addSelectedShape(shape);
+				System.out.println(ShapeList.getInstance().getSelectedshapes());
+			}
+		}
+	}
+	
+	@Override
+	public void undo() {
+
+	}
+
+	@Override
+	public void redo() {
+
+	}
+
+}
