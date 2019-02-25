@@ -1,0 +1,87 @@
+package command;
+
+import java.util.List;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
+import java.util.Collections;
+import shape.ShapeUtill;
+import observe.DrawShapeHandler;
+import observe.IObserver;
+import shape.IShape;
+import shape.OriginalShape;
+import shape.ShapeList;
+import view.gui.PaintCanvas;
+
+public class MoveShapeCommand implements ICommand {
+	
+	private final IObserver observer;
+	private final DrawShapeHandler drawShapeHandler;
+	private final int movedWidth;
+	private final int movedHeight;
+	private final IShape movedShape;
+	private final IShape originShape;
+	
+
+	public MoveShapeCommand(IObserver observer, DrawShapeHandler drawShapeHandler, Point startPoint, Point targetPoint) {
+
+		this.observer = observer;
+		this.drawShapeHandler = drawShapeHandler;
+		this.movedWidth = targetPoint.x - startPoint.x;
+		this.movedHeight = targetPoint.y - startPoint.y;
+		List<IShape> shapes = ShapeList.getInstance().getShapes();
+		
+		Collections.reverse(shapes);
+		IShape movedShapeTmp = null;
+		IShape originShapeTmp = null;
+		for (IShape shape : shapes) {
+			Point p1 = shape.getP1();
+			Point p2 = shape.getP2();
+			Rectangle box = new Rectangle(ShapeUtill.getSmallerX(p1, p2),
+					ShapeUtill.getSmallerY(p1, p2),
+					ShapeUtill.getWidth(p1, p2),
+					ShapeUtill.getHeight(p1, p2));
+			
+			if (box.contains(startPoint)) {
+				movedShapeTmp = new OriginalShape( shape.getActivePrimaryColor(), 
+						shape.getActiveSecondaryColor(), 
+						shape.getActiveShapeType(), 
+						shape.getActiveShapeShadingType(),
+						calculateTargetPoint(shape.getP1()),
+						calculateTargetPoint(shape.getP2()));		
+				originShapeTmp = shape;
+				break;
+			}
+		}
+		this.movedShape = movedShapeTmp;
+		this.originShape = originShapeTmp;
+	}
+
+	@Override
+	public void execute() {
+		observer.delete(originShape);
+		observer.update(movedShape);
+		drawShapeHandler.refresh();
+		
+	}
+	
+	@Override
+	public void undo() {
+		observer.delete(movedShape);
+		observer.update(originShape);
+		drawShapeHandler.refresh();
+
+	}
+
+	@Override
+	public void redo() {
+		execute();
+	
+	}
+	
+	private Point calculateTargetPoint(Point originPoint) {
+		return new Point(originPoint.x + movedWidth, originPoint.y + movedHeight);
+	}
+	
+
+}
