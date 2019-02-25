@@ -1,0 +1,42 @@
+package main;
+
+import controller.IJPaintController;
+import controller.JPaintController;
+import model.persistence.ApplicationState;
+import observe.DrawShapeHandler;
+import shape.ShapeList;
+import view.gui.Gui;
+import view.gui.GuiWindow;
+import view.gui.MouseControl;
+import view.gui.PaintCanvas;
+import view.interfaces.IGuiWindow;
+import view.interfaces.IUiModule;
+import main.DrawShape;
+import command.ShapeCommandFactory;
+
+
+
+public class Main {
+	public static void main(String[] args) {
+
+		javax.swing.SwingUtilities.invokeLater(() -> {
+			
+			DrawShape drawShape = new DrawShape();
+			IGuiWindow guiWindow = new GuiWindow(drawShape);
+			IUiModule uiModule = new Gui(guiWindow);
+			ApplicationState appState = new ApplicationState(uiModule);
+		
+			DrawShapeHandler drawShapeHandler = new DrawShapeHandler(drawShape);
+			ShapeCommandFactory shapeCommandFactory = new ShapeCommandFactory(appState, ShapeList.getInstance(), drawShapeHandler);
+			IJPaintController controller = new JPaintController(uiModule, appState, shapeCommandFactory);
+			controller.setup();
+	
+			MouseControl mc = new MouseControl(shapeCommandFactory);
+			drawShape.addMouseListener(mc);
+	
+	
+		});
+
+	}
+
+}
