@@ -1,0 +1,40 @@
+package view.gui;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import command.ICommand;
+import command.ShapeCommandFactory;
+
+import java.awt.Point;
+
+import model.persistence.ApplicationState;
+
+
+
+public class MouseControl extends MouseAdapter {
+	
+	private Point p1;
+	private Point p2;
+	private final ShapeCommandFactory shapeCommandFactory;
+
+	public MouseControl(ShapeCommandFactory shapeCommandFactory) {
+		this.shapeCommandFactory = shapeCommandFactory;
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+		p1 = e.getPoint();	
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+
+	    p2 = e.getPoint();
+	    
+	    ICommand command = shapeCommandFactory.makeCommand(p1, p2);
+	    command.execute();
+	}
+	
+}
