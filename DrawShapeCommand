@@ -1,0 +1,62 @@
+package command;
+
+
+
+import java.awt.Point;
+
+import model.ShapeColor;
+import model.ShapeShadingType;
+import model.ShapeType;
+import observe.DrawShapeHandler;
+import shape.IShape;
+import shape.OriginalShape;
+import view.gui.PaintCanvas;
+import observe.IObserver;
+
+public class DrawShapeCommand implements ICommand {
+	
+	private final IObserver obserber;
+	private final DrawShapeHandler drawShapeHandler;
+	private final ShapeType shapeType;
+	private final ShapeColor primaryColor;
+	private final ShapeColor secondaryColor;
+	private final Point p1;
+	private final Point p2;
+	private final ShapeShadingType shapeShadingType;
+	private final IShape shape;
+	
+	
+
+	public DrawShapeCommand(IObserver obserber, DrawShapeHandler drawShapeHandler, ShapeType shapeType,
+			ShapeColor primaryColor, ShapeColor secondaryColor, Point p1, Point p2, ShapeShadingType shapeShadingType) {
+	
+		this.obserber = obserber;
+		this.drawShapeHandler = drawShapeHandler;
+		this.shapeType = shapeType;
+		this.primaryColor = primaryColor;
+		this.secondaryColor = secondaryColor;
+		this.p1 = p1;
+		this.p2 = p2;
+		this.shapeShadingType = shapeShadingType;
+		this.shape = new OriginalShape(primaryColor, secondaryColor, shapeType , shapeShadingType, p1, p2);
+	}
+	
+	@Override
+	public void execute() {
+		
+		obserber.update(shape);
+		drawShapeHandler.refresh();
+	}
+
+	@Override
+	public void undo() {
+		obserber.delete(shape);
+		drawShapeHandler.refresh();
+	}
+
+	@Override
+	public void redo() {
+		execute();
+	}
+
+}
