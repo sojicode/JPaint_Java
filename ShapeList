@@ -1,0 +1,52 @@
+package shape;
+
+import java.util.*;
+import observe.IObserver;
+
+
+public class ShapeList implements IObserver{
+	
+	private static final ShapeList instance = new ShapeList();
+	private final List<IShape> shapes = new ArrayList<>();
+	private final List<IShape> selectedShapes = new ArrayList<>();
+	
+	// no instance allowed
+	private ShapeList() {}
+	
+	public static ShapeList getInstance() {
+		return ShapeList.instance;
+	}
+
+	@Override
+	public void update(IShape shape) {
+		shapes.add(shape);
+	}
+	
+	@Override
+	public void delete(IShape shape) {
+		if (!shapes.remove(shape)) {
+			throw new IllegalStateException("failed to delete shape: " + shape);
+		}
+		selectedShapes.remove(shape);
+	}
+	
+	public void flushSelect( ) {
+		selectedShapes.clear();
+	}
+	
+	public void addSelectedShape(IShape shape) {
+		selectedShapes.add(shape);
+	}
+	
+	public List<IShape> getShapes() {
+		return new ArrayList<>(shapes);
+	}
+	
+	 public List<IShape> getSelectedshapes() {
+		 return new ArrayList<>(selectedShapes);
+	 }
+
+}
+
+
+
