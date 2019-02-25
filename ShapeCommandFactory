@@ -1,0 +1,86 @@
+package command;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+import model.StartAndEndPointMode;
+import model.persistence.ApplicationState;
+import observe.DrawShapeHandler;
+import observe.IObserver;
+import shape.IShape;
+
+import command.SelectShapeCommand;
+
+public class ShapeCommandFactory {
+	
+	private final ApplicationState app;
+	private final IObserver observer;
+	private final DrawShapeHandler drawShapeHandler;
+	private final Stack<ICommand> undoableCommands = new Stack<>();
+	private final Stack<ICommand> redoableCommands = new Stack<>();
+	private final List<IShape> copyBuffer = new ArrayList<>();
+	
+	
+	public ShapeCommandFactory(ApplicationState app, IObserver observer, DrawShapeHandler drawShapeHandler ) {
+		this.app = app;
+		this.observer = observer;
+		this.drawShapeHandler = drawShapeHandler;
+		
+	}
+	
+	public ICommand makeCommand(Point p1, Point p2) { 
+		
+		StartAndEndPointMode actionMode = app.getActiveStartAndEndPointMode();
+		ICommand command;
+	
+		switch(actionMode) {
+		case DRAW:
+			command = new DrawShapeCommand(observer, drawShapeHandler,
+					app.getActiveShapeType(),
+					app.getActivePrimaryColor(),
+					app.getActiveSecondaryColor(),
+					p1, p2, 
+					app.getActiveShapeShadingType());
+			break;
+			
+		case MOVE:
+			command = new MoveShapeCommand(observer, drawShapeHandler, p1, p2);
+			break;
+			
+		case SELECT:
+			command = new SelectShapeCommand(p1, p2);
+			break;
+			
+		default:
+			throw new IllegalStateException("unknown" + app.getActiveStartAndEndPointMode());
+		}
+		return undoableCommands.push(command);
+	}
+		
+		public ICommand createUndoCommand() {
+			return new UndoCommand(undoableCommands, redoableCommands);
+		}
+		
+		public ICommand createRedoCommand() {
+			return new RedoCommand(undoableCommands, redoableCommands);
+		}
+		
+		public ICommand createCopyCommand() {
+			return undoableCommands.push(new CopyShapeCommand(copyBuffer));
+		}
+		
+		public ICommand createPasteCommand() {
+			return undoableCommands.push(new PasteShapeCommand(copyBuffer, observer, drawShapeHandler));
+		}
+		
+		public ICommand createDeleteShapeCommand() {
+			return undoableCommands.push(new DeleteShapeCommand(observer, drawShapeHandler));
+				
+		}
+
+	
+	
+
+}
