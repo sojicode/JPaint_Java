@@ -1,0 +1,24 @@
+package shape;
+
+import java.awt.Point;
+
+public class ShapeUtill {
+	private ShapeUtill() {
+		
+	}
+	public static int getSmallerX(Point p1, Point p2) {
+	    return Math.min(p1.x, p2.x);
+	  }
+
+	  public static int getSmallerY(Point p1, Point p2) {
+	    return Math.min(p1.y, p2.y);
+	  }
+
+	  public static int getWidth(Point p1, Point p2) {
+	    return Math.max(p1.x, p2.x) - Math.min(p1.x, p2.x);
+	  }
+
+	  public static int getHeight(Point p1, Point p2) {
+	    return Math.max(p1.y, p2.y) - Math.min(p1.y, p2.y);
+	  }
+}
