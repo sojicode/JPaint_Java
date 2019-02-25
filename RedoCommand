@@ -1,0 +1,38 @@
+package command;
+
+import java.util.Stack;
+
+public class RedoCommand implements ICommand {
+	
+	private final Stack<ICommand> undoableCommands;
+	private final Stack<ICommand> redoableCommands;
+	
+	
+
+	public RedoCommand(Stack<ICommand> undoableCommands, Stack<ICommand> redoableCommands) {
+	
+		this.undoableCommands = undoableCommands;
+		this.redoableCommands = redoableCommands;
+	}
+
+	@Override
+	public void execute() {
+		if(redoableCommands.isEmpty()) {
+			return;
+		}
+		ICommand command = redoableCommands.pop();
+		undoableCommands.push(command);
+		command.redo();
+	}
+
+	@Override
+	public void undo() {
+		
+	}
+
+	@Override
+	public void redo() {
+
+	}
+
+}
