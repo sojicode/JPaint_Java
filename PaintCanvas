@@ -1,0 +1,47 @@
+package view.gui;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+import javax.swing.JComponent;
+
+import main.DrawShape;
+import shape.ShapeList;
+
+
+public class PaintCanvas extends JComponent {
+	
+	/**
+	 * 
+	 */
+//	private static final long serialVersionUID = 1L;
+//	
+//	private static final PaintCanvas instance = new PaintCanvas();
+//	
+//	private PaintCanvas() {}
+//	
+//	public static PaintCanvas getInstance() {
+//		return instance;
+//	}
+//
+//	public Graphics2D getGraphics2D() {
+//        return (Graphics2D)getGraphics();
+//	}
+//	
+//	public void paint(boolean move) {
+//		Graphics2D graphic = this.getGraphics2D();
+//		graphic.setColor(Color.WHITE);
+//		graphic.setStroke(new BasicStroke(5));
+//		graphic.fillRect(0, 0, this.getWidth(), this.getHeight());
+//		int size = ShapeList.getShapeListCount();
+//		for (int i = 0; i < size; i++) {
+//			DrawShape.drawShape2(ShapeList.getShapeList().get(i), move);
+//		}
+//		
+//	}
+//		
+    
+}
+
+
