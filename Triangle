@@ -1,0 +1,68 @@
+package shape;
+
+import java.awt.Point;
+
+import model.ShapeColor;
+import model.ShapeShadingType;
+import model.ShapeType;
+import model.persistence.ApplicationState;
+
+public class Triangle implements IShape {
+	
+	private final Point startPoint;
+	private final Point endPoint;
+	private final ShapeColor primaryColor;
+	private final ShapeColor secondaryColor;
+	private final ShapeType shapeType;
+	private final ShapeShadingType shading;
+	private ApplicationState app;
+	
+	
+	public Triangle(Point startPoint, Point endPoint, ShapeColor primaryColor, ShapeColor secondaryColor,
+			ShapeType shapeType, ShapeShadingType shading, ApplicationState app) {
+
+		this.startPoint = startPoint;
+		this.endPoint = endPoint;
+		this.primaryColor = primaryColor;
+		this.secondaryColor = secondaryColor;
+		this.shapeType = shapeType;
+		this.shading = shading;
+		this.app = app;
+	}
+
+	@Override
+	public ShapeColor getActivePrimaryColor() {
+		
+		return primaryColor;
+	}
+
+	@Override
+	public ShapeColor getActiveSecondaryColor() {
+	
+		return secondaryColor;
+	}
+
+	@Override
+	public ShapeType getActiveShapeType() {
+		
+		return shapeType;
+	}
+
+	@Override
+	public ShapeShadingType getActiveShapeShadingType() {
+
+		return shading;
+	}
+
+	@Override
+	public Point getP1() {
+
+		return startPoint;
+	}
+
+	@Override
+	public Point getP2() {
+
+		return endPoint;
+	}
+}
