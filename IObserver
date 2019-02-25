@@ -1,0 +1,11 @@
+package observe;
+
+import shape.IShape;
+
+
+public interface IObserver {
+
+	public void update(IShape shape);
+	public void delete(IShape shape);
+
+}
