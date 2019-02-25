@@ -1,0 +1,44 @@
+package command;
+
+import java.util.List;
+
+import observe.DrawShapeHandler;
+import observe.IObserver;
+import shape.IShape;
+import shape.ShapeList;
+
+public class DeleteShapeCommand implements ICommand {
+	
+	private final IObserver observer;
+	private final DrawShapeHandler drawShapeHandler;
+	private final List<IShape> selectedShapes;
+	
+
+	public DeleteShapeCommand(IObserver observer, DrawShapeHandler drawShapeHandler) {
+
+		this.observer = observer;
+		this.drawShapeHandler = drawShapeHandler;
+		this.selectedShapes = ShapeList.getInstance().getSelectedshapes();
+	}
+	
+	@Override
+	public void execute() {
+		selectedShapes.forEach(observer::delete);
+		drawShapeHandler.refresh();
+
+	}
+
+	@Override
+	public void undo() {
+		selectedShapes.forEach(observer::update);
+		drawShapeHandler.refresh();
+
+	}
+
+	@Override
+	public void redo() {
+		execute();
+	}
+
+
+}
