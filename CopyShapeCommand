@@ -1,0 +1,49 @@
+package command;
+
+import java.awt.Point;
+import java.util.List;
+import observe.DrawShapeHandler;
+import observe.IObserver;
+import shape.IShape;
+import shape.OriginalShape;
+import shape.ShapeList;
+
+public class CopyShapeCommand implements ICommand {
+	
+	private final List<IShape> selectedShapes;
+	private final List<IShape> copyBuffer;
+	
+
+	public CopyShapeCommand(List<IShape> copyBuffer) {
+	
+		this.selectedShapes = ShapeList.getInstance().getSelectedshapes();
+		this.copyBuffer = copyBuffer;
+	}
+	
+	@Override
+	public void execute() {
+		copyBuffer.clear();
+		selectedShapes.stream()
+		.map(shape -> new OriginalShape(shape.getActivePrimaryColor(),
+				shape.getActiveSecondaryColor(),
+				shape.getActiveShapeType(),
+				shape.getActiveShapeShadingType(),
+				new Point(shape.getP1().x + 20, shape.getP1().y + 20),
+				new Point(shape.getP2().x + 20, shape.getP2().y + 20)))
+		.forEach(copyBuffer::add);
+	}
+
+	@Override
+	public void undo() {
+		copyBuffer.clear();
+
+	}
+
+	@Override
+	public void redo() {
+		execute();
+
+	}
+
+
+}
