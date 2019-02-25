@@ -1,0 +1,42 @@
+package command;
+
+import observe.DrawShapeHandler;
+import observe.IObserver;
+import shape.IShape;
+import java.util.*;
+
+public class PasteShapeCommand implements ICommand {
+	
+	private final List<IShape> copyBuffer;
+	private final IObserver observer;
+	private final DrawShapeHandler drawShapeHandler;
+	
+	
+
+	public PasteShapeCommand(List<IShape> copyBuffer, IObserver observer, DrawShapeHandler drawShapeHandler) {
+	
+		this.copyBuffer = copyBuffer;
+		this.observer = observer;
+		this.drawShapeHandler = drawShapeHandler;
+	}
+	
+	@Override
+	public void execute() {
+		copyBuffer.stream().forEach(observer::update);
+		drawShapeHandler.refresh();
+	}
+
+	@Override
+	public void undo() {
+		copyBuffer.forEach(observer::delete);
+		drawShapeHandler.refresh();
+
+	}
+
+	@Override
+	public void redo() {
+		execute();
+
+	}
+
+}
