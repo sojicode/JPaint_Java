@@ -1,0 +1,24 @@
+package shape;
+
+import java.awt.Point;
+
+import model.ShapeColor;
+import model.ShapeShadingType;
+import model.ShapeType;
+
+public interface IShape {
+
+	public ShapeColor getActivePrimaryColor();
+
+	public ShapeColor getActiveSecondaryColor();
+
+	public ShapeType getActiveShapeType();
+
+	public ShapeShadingType getActiveShapeShadingType() ;
+
+	public Point getP1();
+
+	public Point getP2();
+	
+
+}
