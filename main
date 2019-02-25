@@ -1,0 +1,192 @@
+package main;
+
+
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JComponent;
+import model.ShapeColor;
+import model.ShapeType;
+import output.MakeColor;
+import shape.IShape;
+import shape.ShapeUtill;
+
+
+public class DrawShape extends JComponent{
+
+	private final Map<ShapeType, ShapeStrategy> shapeStrategybyShapeType;
+
+	
+
+	public Graphics2D getGraphics2D() {
+		return (Graphics2D)getGraphics();
+	}
+	
+	public DrawShape() {
+		shapeStrategybyShapeType = new HashMap<>();
+		shapeStrategybyShapeType.put(ShapeType.RECTANGLE, new RectStrategy());
+		shapeStrategybyShapeType.put(ShapeType.ELLIPSE, new EllipseStrategy());
+		shapeStrategybyShapeType.put(ShapeType.TRIANGLE, new TriangleStrategy());
+	}
+
+	public void wipeOut() {
+
+		getGraphics2D().clearRect(0, 0, getWidth(), getHeight());
+
+	}
+
+	public void drawShape(IShape shape) {
+		
+		shapeStrategybyShapeType.get(shape.getActiveShapeType()).drawShape(shape);
+	}
+
+
+	 class RectStrategy implements ShapeStrategy {
+
+
+		@Override
+		public void drawShape(IShape shape) {
+			switch (shape.getActiveShapeShadingType()) {
+			case OUTLINE:
+				drawRect(shape, shape.getActivePrimaryColor());
+				break;
+			case FILLED_IN:
+				fillRect(shape, shape.getActivePrimaryColor());
+				break;
+			case OUTLINE_AND_FILLED_IN:
+				fillRect(shape, shape.getActivePrimaryColor());
+				drawRect(shape, shape.getActiveSecondaryColor());
+				break;
+			}
+		}
+
+		private void drawRect(IShape shape, ShapeColor color) {
+			Graphics2D g2 = getGraphics2D();
+			g2.setColor(MakeColor.getColor(color));
+			Point p1 = shape.getP1();
+			Point p2 = shape.getP2();
+			g2.drawRect(ShapeUtill.getSmallerX(p1, p2),
+					ShapeUtill.getSmallerY(p1, p2),
+					ShapeUtill.getWidth(p1, p2),
+					ShapeUtill.getHeight(p1, p2));
+		}
+
+		private void fillRect(IShape shape, ShapeColor color) {
+			Graphics2D g2 = getGraphics2D();
+			g2.setColor(MakeColor.getColor(color));
+			Point p1 = shape.getP1();
+			Point p2 = shape.getP2();
+			g2.fillRect(ShapeUtill.getSmallerX(p1, p2),
+					ShapeUtill.getSmallerY(p1, p2),
+					ShapeUtill.getWidth(p1, p2),
+					ShapeUtill.getHeight(p1, p2));
+		}
+
+	}
+
+	
+	 class EllipseStrategy implements ShapeStrategy {
+
+		
+		@Override
+		public void drawShape(IShape shape) {
+
+			switch (shape.getActiveShapeShadingType()) {
+			case OUTLINE:
+				drawOval(shape, shape.getActivePrimaryColor());
+				break;
+			case FILLED_IN:
+				fillOval(shape, shape.getActivePrimaryColor());
+				break;
+			case OUTLINE_AND_FILLED_IN:
+				fillOval(shape, shape.getActivePrimaryColor());
+				drawOval(shape, shape.getActiveSecondaryColor());
+				break;
+			}
+		}
+
+	
+		private void drawOval(IShape shape, ShapeColor color) {
+			Graphics2D g2 = getGraphics2D();
+			g2.setColor(MakeColor.getColor(color));
+			Point p1 = shape.getP1();
+			Point p2 = shape.getP2();
+			g2.drawOval(ShapeUtill.getSmallerX(p1, p2),
+					ShapeUtill.getSmallerY(p1, p2),
+					ShapeUtill.getWidth(p1, p2),
+					ShapeUtill.getHeight(p1, p2));
+		}
+
+		private void fillOval(IShape shape, ShapeColor color) {
+			Graphics2D g2 = getGraphics2D();
+			g2.setColor(MakeColor.getColor(color));
+			Point p1 = shape.getP1();
+			Point p2 = shape.getP2();
+			g2.fillOval(ShapeUtill.getSmallerX(p1, p2),
+					ShapeUtill.getSmallerY(p1, p2),
+					ShapeUtill.getWidth(p1, p2),
+					ShapeUtill.getHeight(p1, p2));
+		}
+	}
+
+	
+	 class TriangleStrategy implements ShapeStrategy {
+
+
+		@Override
+		public void drawShape(IShape shape) {
+			
+			switch (shape.getActiveShapeShadingType()) {
+			case OUTLINE:
+				drawPolygon(shape, shape.getActivePrimaryColor());
+				break;
+			case FILLED_IN:
+				fillPolygon(shape, shape.getActivePrimaryColor());
+				break;
+			case OUTLINE_AND_FILLED_IN:
+				fillPolygon(shape, shape.getActivePrimaryColor());
+				drawPolygon(shape, shape.getActiveSecondaryColor());
+				break;
+			}
+		}
+
+		
+		private void drawPolygon(IShape shape, ShapeColor color) {
+			Graphics2D g2 = getGraphics2D();
+			g2.setColor(MakeColor.getColor(color));
+			Point p1 = shape.getP1();
+			Point p2 = shape.getP2();
+			int x = ShapeUtill.getSmallerX(p1, p2);
+			int y = ShapeUtill.getSmallerY(p1, p2);
+			int width = ShapeUtill.getWidth(p1, p2);
+			int height = ShapeUtill.getHeight(p1, p2);
+			int[] pointX = {x + width, x, x + width};
+			int[] pointY = {y, y + height, y + height};
+			g2.drawPolygon(pointX, pointY, 3);
+		}
+
+		private void fillPolygon(IShape shape, ShapeColor color) {
+			Graphics2D g2 = getGraphics2D();
+			g2.setColor(MakeColor.getColor(color));
+			Point p1 = shape.getP1();
+			Point p2 = shape.getP2();
+			int x = ShapeUtill.getSmallerX(p1, p2);
+			int y = ShapeUtill.getSmallerY(p1, p2);
+			int width = ShapeUtill.getWidth(p1, p2);
+			int height = ShapeUtill.getHeight(p1, p2);
+			int[] pointX = {x + width, x, x + width};
+			int[] pointY = {y, y + height, y + height};
+			g2.fillPolygon(pointX, pointY, 3);
+		}
+
+	}
+}
+
+
+	
+		
+
+	
+
