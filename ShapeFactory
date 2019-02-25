@@ -1,0 +1,34 @@
+package shape;
+
+import java.awt.Point;
+
+import model.ShapeColor;
+import model.ShapeShadingType;
+import model.ShapeType;
+import model.persistence.ApplicationState;
+
+public class ShapeFactory {
+	
+	private ShapeFactory() {}
+	
+	public static IShape createEllipse(Point startPoint, Point endPoint, ShapeColor primaryColor, ShapeColor secondaryColor,
+			ShapeType shapeType, ShapeShadingType shading, ApplicationState app) {
+		
+		return new Ellipse(startPoint, endPoint, primaryColor, secondaryColor,
+			shapeType, shading, app);
+	}
+	
+	public static IShape createRectangle(Point startPoint, Point endPoint, ShapeColor primaryColor, ShapeColor secondaryColor,
+			ShapeType shapeType, ShapeShadingType shading, ApplicationState app) {
+		return new RectangleShape(startPoint, endPoint, primaryColor, secondaryColor,
+			shapeType, shading, app);
+	}
+	
+	public static IShape createTriangle(Point startPoint, Point endPoint, ShapeColor primaryColor, ShapeColor secondaryColor,
+			ShapeType shapeType, ShapeShadingType shading, ApplicationState app) {
+		return new Triangle(startPoint, endPoint, primaryColor, secondaryColor,
+			shapeType, shading, app);
+	}
+	
+
+}
