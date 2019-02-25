@@ -1,0 +1,9 @@
+package main;
+
+import shape.IShape;
+
+public interface ShapeStrategy {
+	
+	void drawShape(IShape shape);
+
+}
