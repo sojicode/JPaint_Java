@@ -1,0 +1,33 @@
+package observe;
+
+
+
+import java.util.List;
+
+import main.DrawShape;
+import shape.IShape;
+import shape.ShapeList;
+
+public class DrawShapeHandler {
+
+	
+	private final DrawShape drawShape;
+
+	public DrawShapeHandler(DrawShape drawShape) {
+		this.drawShape = drawShape;
+	}
+	
+	public void draw() {
+		List<IShape> shapes = ShapeList.getInstance().getShapes();
+	
+		for(IShape rs:shapes) {
+			drawShape.drawShape(rs);
+		}	
+	}
+	
+	public void refresh() {
+		drawShape.wipeOut();
+		draw();
+	}
+
+}
